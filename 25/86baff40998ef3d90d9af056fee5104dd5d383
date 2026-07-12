@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-07-12-plant-monitor-design.md
+  s_0db89ba871093c::t_eae6da43cb3c9a 1-94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "2586baff40998ef3d90d9af056fee5104dd5d383",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

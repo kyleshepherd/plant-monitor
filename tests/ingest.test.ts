@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseOmg, shouldStoreReading } from '../src/lib/server/ingest';
+import { parseOmg, mergeReading, shouldStoreReading } from '../src/lib/server/ingest';
 
 const TOPIC = 'home/OMG_ESP32_BLE/BTtoMQTT/C47C8D6D5E2F';
 const FLORA = JSON.stringify({
@@ -35,6 +35,24 @@ describe('parseOmg', () => {
 			parseOmg(TOPIC, JSON.stringify({ id: 'AA:BB:CC:DD:EE:FF', model_id: 'MUE4094RT' }))
 		).toBeNull();
 		expect(parseOmg(TOPIC, 'not json')).toBeNull();
+	});
+});
+
+describe('mergeReading', () => {
+	it('accumulates single-metric broadcasts into one snapshot (real HHCCJCY01 behaviour)', () => {
+		const a = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', lux: 812 }))!;
+		const b = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', moi: 31 }))!;
+		const c = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', tempc: 22.1 }))!;
+		let snap = mergeReading(null, a);
+		snap = mergeReading(snap, b);
+		snap = mergeReading(snap, c);
+		expect(snap).toEqual({ mac: 'C47C8D6D5E2F', moisture: 31, lux: 812, tempC: 22.1, fertility: null, battery: null });
+	});
+	it('newer values overwrite older ones, nulls never overwrite', () => {
+		const first = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', moi: 31 }))!;
+		const second = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', moi: 28 }))!;
+		const other = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', lux: 500 }))!;
+		expect(mergeReading(mergeReading(first, second), other).moisture).toBe(28);
 	});
 });
 

@@ -38,9 +38,28 @@ export function shouldStoreReading(lastStoredAt: Date | null, now: Date): boolea
 	return !lastStoredAt || now.getTime() - lastStoredAt.getTime() >= HOUR_MS;
 }
 
+// Real HHCCJCY01 sensors broadcast ONE metric per BLE advertisement (lux in one
+// packet, moisture in the next, ...). Merge packets into a rolling snapshot per
+// sensor so stored readings carry all metrics, not whichever packet came first.
+export function mergeReading(prev: ParsedReading | null, next: ParsedReading): ParsedReading {
+	if (!prev) return next;
+	return {
+		mac: next.mac,
+		moisture: next.moisture ?? prev.moisture,
+		lux: next.lux ?? prev.lux,
+		tempC: next.tempC ?? prev.tempC,
+		fertility: next.fertility ?? prev.fertility,
+		battery: next.battery ?? prev.battery
+	};
+}
+
+const snapshots = new Map<string, ParsedReading>();
+
 export async function ingest(topic: string, payload: string, now = new Date()): Promise<void> {
-	const parsed = parseOmg(topic, payload);
-	if (!parsed) return;
+	const single = parseOmg(topic, payload);
+	if (!single) return;
+	const parsed = mergeReading(snapshots.get(single.mac) ?? null, single);
+	snapshots.set(single.mac, parsed);
 
 	const [sensor] = await db
 		.insert(sensors)

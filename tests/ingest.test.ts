@@ -29,6 +29,17 @@ describe('parseOmg', () => {
 		const p = JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY10', moi: 40, batt: 92 });
 		expect(parseOmg(TOPIC, p)?.battery).toBe(92);
 	});
+	it('parses OMG active-connect battery messages (model, no model_id)', () => {
+		const p = JSON.stringify({ model: 'HHCCJCY01HHCC', id: '5C:85:7E:13:4D:23', batt: 100 });
+		expect(parseOmg(TOPIC, p)).toEqual({
+			mac: '5C857E134D23',
+			moisture: null,
+			lux: null,
+			tempC: null,
+			fertility: null,
+			battery: 100
+		});
+	});
 	it('returns null for non-sensor messages (gateway status, other devices)', () => {
 		expect(parseOmg('home/OMG_ESP32_BLE/LWT', 'online')).toBeNull();
 		expect(

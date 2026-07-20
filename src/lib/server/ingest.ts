@@ -20,7 +20,9 @@ export function parseOmg(topic: string, payload: string): ParsedReading | null {
 	} catch {
 		return null;
 	}
-	if (typeof data.id !== 'string' || !PLANT_MODELS.test(String(data.model_id ?? ''))) return null;
+	// Broadcast decodes carry model_id; OMG's active-connect reads (battery) only carry model.
+	const model = String(data.model_id ?? data.model ?? '');
+	if (typeof data.id !== 'string' || !PLANT_MODELS.test(model)) return null;
 	const num = (v: unknown) => (typeof v === 'number' ? v : null);
 	return {
 		mac: data.id.replaceAll(':', '').toUpperCase(),

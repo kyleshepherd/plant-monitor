@@ -1,0 +1,21 @@
+tests/ingest.test.ts
+  s_0db89ba871093c::t_38747b955a3117 32-42
+src/lib/server/ingest.ts
+  s_0db89ba871093c::t_705e07e413d6fc 23-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "922fdb43c67a48bb77ca5091550db170f3fec090",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

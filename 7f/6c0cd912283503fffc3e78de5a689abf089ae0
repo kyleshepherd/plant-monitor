@@ -1,0 +1,25 @@
+package.json
+  s_0db89ba871093c::t_496adff60b4ae2 15
+src/lib/server/mqtt.ts
+  s_0db89ba871093c::t_1148eb57544299 1-25
+scripts/fake-publisher.mjs
+  s_0db89ba871093c::t_2a3edc40601a3f 1-29
+src/hooks.server.ts
+  s_0db89ba871093c::t_139d6131dd5103 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7f6c0cd912283503fffc3e78de5a689abf089ae0",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

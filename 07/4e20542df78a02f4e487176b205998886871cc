@@ -1,0 +1,24 @@
+package.json
+  s_0db89ba871093c::t_2a3247b66034d9 47-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "074e20542df78a02f4e487176b205998886871cc",
+  "prompts": {},
+  "humans": {
+    "h_0f8ff4ffb0acf7": {
+      "author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

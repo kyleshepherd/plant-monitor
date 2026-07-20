@@ -1,0 +1,26 @@
+src/lib/server/thresholds.ts
+  s_0db89ba871093c::t_ecd8dad9170f3f 19-21
+  s_0db89ba871093c::t_206b863e8ddbe7 38-40
+  s_0db89ba871093c::t_ddb429f4bcbaa4 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "58e4f3d58db416c4e935439fce40d821c3e2bb73",
+  "prompts": {},
+  "humans": {
+    "h_0f8ff4ffb0acf7": {
+      "author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+src/lib/server/scheduler.ts
+  s_0db89ba871093c::t_5e919f72411ef5 1-13
+src/routes/+layout.svelte
+  s_0db89ba871093c::t_b9fd77c0530805 3,6-24,28,31-38
+src/hooks.server.ts
+  s_0db89ba871093c::t_c6540b96f2b7d1 3,7
+src/routes/api/push/+server.ts
+  s_0db89ba871093c::t_ce5c41c676997e 1-11
+src/app.html
+  s_0db89ba871093c::t_ace08fbb5d2196 7-8
+src/lib/server/push.ts
+  s_0db89ba871093c::t_bd06ec9f232b1a 1-31
+src/service-worker.js
+  s_6fac69c73433ed::t_a6bbbf5f679449 1-9
+static/manifest.webmanifest
+  s_6fac69c73433ed::t_68740a412ea3e5 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c3dada27715e03a7a59d360420664531084094bf",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    },
+    "s_6fac69c73433ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "80020ecd-5856-475b-8c43-d6acbbbc93e4",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

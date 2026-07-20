@@ -12,6 +12,38 @@ export type ParsedReading = {
 
 const PLANT_MODELS = /^HHCCJCY/;
 
+// Some Flower Care units broadcast an older MiBeacon dialect the gateway's
+// decoder doesn't recognize; with pubadvdata enabled the gateway forwards the
+// raw fe95 service data and we parse the TLV objects ourselves.
+// Layout: frctrl(2) product(2) framecnt(1) mac(6, reversed) [capability(1)]
+// then TLVs of [objectId(2 LE, 0x10XX) len(1) value(len)].
+function parseMiBeacon(mac: string, hex: string): ParsedReading | null {
+	const buf = Buffer.from(hex, 'hex');
+	if (buf.length < 14) return null;
+	const macReversed = Buffer.from(mac, 'hex').reverse().toString('hex');
+	if (buf.subarray(5, 11).toString('hex') !== macReversed) return null;
+
+	let off = 11;
+	if (buf[off + 1] !== 0x10) off += 1; // skip capability byte when present
+	const out: ParsedReading = { mac, moisture: null, lux: null, tempC: null, fertility: null, battery: null };
+	let found = false;
+	while (off + 3 <= buf.length && buf[off + 1] === 0x10) {
+		const objectId = buf.readUInt16LE(off);
+		const len = buf[off + 2];
+		const val = buf.subarray(off + 3, off + 3 + len);
+		if (val.length !== len) break;
+		switch (objectId) {
+			case 0x1004: out.tempC = val.readInt16LE(0) / 10; found = true; break;
+			case 0x1007: out.lux = val.readUIntLE(0, Math.min(len, 3)); found = true; break;
+			case 0x1008: out.moisture = val[0]; found = true; break;
+			case 0x1009: out.fertility = val.readUInt16LE(0); found = true; break;
+			case 0x100a: out.battery = val[0]; found = true; break;
+		}
+		off += 3 + len;
+	}
+	return found ? out : null;
+}
+
 export function parseOmg(topic: string, payload: string): ParsedReading | null {
 	if (!topic.includes('/BTtoMQTT/')) return null;
 	let data: Record<string, unknown>;
@@ -20,18 +52,30 @@ export function parseOmg(topic: string, payload: string): ParsedReading | null {
 	} catch {
 		return null;
 	}
+	if (typeof data.id !== 'string') return null;
+	const mac = data.id.replaceAll(':', '').toUpperCase();
 	// Broadcast decodes carry model_id; OMG's active-connect reads (battery) only carry model.
 	const model = String(data.model_id ?? data.model ?? '');
-	if (typeof data.id !== 'string' || !PLANT_MODELS.test(model)) return null;
-	const num = (v: unknown) => (typeof v === 'number' ? v : null);
-	return {
-		mac: data.id.replaceAll(':', '').toUpperCase(),
-		moisture: num(data.moi),
-		lux: num(data.lux),
-		tempC: num(data.tempc),
-		fertility: num(data.fer),
-		battery: num(data.batt)
-	};
+	if (PLANT_MODELS.test(model)) {
+		const num = (v: unknown) => (typeof v === 'number' ? v : null);
+		return {
+			mac,
+			moisture: num(data.moi),
+			lux: num(data.lux),
+			tempC: num(data.tempc),
+			fertility: num(data.fer),
+			battery: num(data.batt)
+		};
+	}
+	// Undecoded device: try raw Xiaomi service data (uuid 0xfe95)
+	if (data.servicedatauuid === '0xfe95' && typeof data.servicedata === 'string') {
+		try {
+			return parseMiBeacon(mac, data.servicedata);
+		} catch {
+			return null;
+		}
+	}
+	return null;
 }
 
 const HOUR_MS = 60 * 60 * 1000;

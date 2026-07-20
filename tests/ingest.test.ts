@@ -49,6 +49,44 @@ describe('parseOmg', () => {
 	});
 });
 
+describe('parseOmg — raw MiBeacon servicedata (older-dialect Flower Care)', () => {
+	// real packets captured from sensor 5C:85:7E:13:6C:BA on 2026-07-20
+	const raw = (servicedata: string) =>
+		JSON.stringify({
+			id: '5C:85:7E:13:6C:BA',
+			name: 'Flower care',
+			rssi: -80,
+			servicedata,
+			servicedatauuid: '0xfe95'
+		});
+	it('parses a moisture packet', () => {
+		expect(parseOmg(TOPIC, raw('7120980055ba6c137e855c0d08100101'))).toEqual({
+			mac: '5C857E136CBA',
+			moisture: 1,
+			lux: null,
+			tempC: null,
+			fertility: null,
+			battery: null
+		});
+	});
+	it('parses a lux packet', () => {
+		expect(parseOmg(TOPIC, raw('712098005cba6c137e855c0d0710039c0600'))?.lux).toBe(1692);
+	});
+	it('parses a conductivity packet', () => {
+		expect(parseOmg(TOPIC, raw('7120980062ba6c137e855c0d0910020000'))?.fertility).toBe(0);
+	});
+	it('parses a temperature packet (0x1004, int16 LE / 10)', () => {
+		// synthetic: same header, obj 0x1004 len 2 value 0xDE 0x00 = 222 -> 22.2°C
+		expect(parseOmg(TOPIC, raw('7120980063ba6c137e855c0d041002de00'))?.tempC).toBe(22.2);
+	});
+	it('ignores non-fe95 servicedata and junk', () => {
+		expect(
+			parseOmg(TOPIC, JSON.stringify({ id: 'AA:BB:CC:DD:EE:FF', servicedata: 'ffff', servicedatauuid: '0x1809' }))
+		).toBeNull();
+		expect(parseOmg(TOPIC, raw('7120'))).toBeNull();
+	});
+});
+
 describe('mergeReading', () => {
 	it('accumulates single-metric broadcasts into one snapshot (real HHCCJCY01 behaviour)', () => {
 		const a = parseOmg(TOPIC, JSON.stringify({ id: 'C4:7C:8D:6D:5E:2F', model_id: 'HHCCJCY01HHCC', lux: 812 }))!;

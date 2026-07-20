@@ -1,0 +1,25 @@
+src/routes/login/+page.server.ts
+  s_0db89ba871093c::t_a3525b13899433 1-19
+src/lib/server/auth.ts
+  s_0db89ba871093c::t_428b50def604f4 1-13
+src/routes/login/+page.svelte
+  s_0db89ba871093c::t_650d4ddf822145 1-10
+src/hooks.server.ts
+  s_0db89ba871093c::t_5f773d9beadafd 1,3,6-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "bc7f491efe9516b618c8645f778dafd64f106ea2",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

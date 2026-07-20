@@ -1,42 +1,33 @@
-# sv
+# 🌱 Plant Monitor
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+BLE plant sensors (HHCC Flower Care) → ESP32 running OpenMQTTGateway → MQTT → this SvelteKit PWA → Web Push when a plant needs water.
 
-## Creating a project
+## How it works
 
-If you're seeing this, you've probably already done this step. Congrats!
+- The ESP32 hub passively decodes MiFlora BLE broadcasts and publishes them to MQTT.
+- This app (one long-lived Node process) subscribes, stores at most one reading per sensor per hour, and evaluates every plant twice a day: moisture below its species threshold, battery under 15%, or sensor silent for 36h → Web Push notification (re-nagged at most daily).
+- Thresholds come from OpenPlantbook by species, falling back to category presets, always manually overridable.
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## Dev
 
-To recreate this project with the same configuration:
+    docker compose up -d      # local Postgres (:5433) + mosquitto (:1883)
+    cp .env.example .env      # fill in secrets (see .env.example comments)
+    pnpm install && pnpm db:push
+    pnpm dev
+    pnpm fake 5               # simulate two thirsty sensors
+    pnpm test
 
-```sh
-# recreate this project
-pnpm dlx sv@0.16.3 create --template minimal --types ts --install pnpm /private/tmp/claude-502/-Users-kyleshepherd-personal-plant-monitor/ffdf63cf-4c9f-4abb-9472-e057bb4d1113/scratchpad/pm-scaffold
-```
+Login password is `APP_PASSWORD`. The 12h evaluation also runs ~30s after boot, so restart `pnpm dev` to force an alert check.
 
-## Developing
+## Deploy (Railway)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+1. Push to GitHub → Railway → New Project → deploy from repo. Add the Postgres plugin.
+2. Set env vars: `MQTT_URL` (`mqtts://<hivemq-host>:8883`), `MQTT_USERNAME`, `MQTT_PASSWORD`, `APP_PASSWORD`, `AUTH_SECRET` (`openssl rand -hex 32`), `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` (`npx web-push generate-vapid-keys`), `OPENPLANTBOOK_API_KEY`.
+3. Build `pnpm build`, start `node build`. Apply schema once: `DATABASE_URL=<railway-url> pnpm db:push`.
+4. Open the URL on your phone → Add to Home Screen → enable push.
 
-```sh
-npm run dev
+## Docs
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- Spec: `docs/superpowers/specs/2026-07-12-plant-monitor-design.md`
+- Plan: `docs/superpowers/plans/2026-07-20-plant-monitor.md`
+- Hardware bring-up: `docs/hardware-setup.md`

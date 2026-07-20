@@ -1,5 +1,6 @@
 import { and, desc, eq, isNull } from 'drizzle-orm';
 import { db, sensors, plants, readings, alerts } from '$lib/server/db';
+import { currentSnapshot } from '$lib/server/ingest';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -27,9 +28,20 @@ export const load: PageServerLoad = async () => {
 				.from(alerts)
 				.where(and(eq(alerts.sensorId, row.sensor.id), isNull(alerts.resolvedAt)))
 				.limit(1);
+			// Overlay the live in-memory snapshot: fresher than the hourly stored reading.
+			const snap = currentSnapshot(row.sensor.mac);
+			const merged = snap
+				? {
+						moisture: snap.moisture ?? latest?.moisture ?? null,
+						lux: snap.lux ?? latest?.lux ?? null,
+						tempC: snap.tempC ?? latest?.tempC ?? null,
+						fertility: snap.fertility ?? latest?.fertility ?? null,
+						battery: snap.battery ?? latest?.battery ?? null
+					}
+				: (latest ?? null);
 			return {
 				...row,
-				latest: latest ?? null,
+				latest: merged,
 				history: history.reverse(),
 				openAlert: openAlert ?? null
 			};

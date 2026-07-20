@@ -55,6 +55,11 @@ export function mergeReading(prev: ParsedReading | null, next: ParsedReading): P
 
 const snapshots = new Map<string, ParsedReading>();
 
+// Live merged state for a sensor — fresher than the hourly stored reading.
+export function currentSnapshot(mac: string): ParsedReading | undefined {
+	return snapshots.get(mac);
+}
+
 export async function ingest(topic: string, payload: string, now = new Date()): Promise<void> {
 	const single = parseOmg(topic, payload);
 	if (!single) return;

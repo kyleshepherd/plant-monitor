@@ -5,7 +5,7 @@ BLE plant sensors (HHCC Flower Care) → ESP32 running OpenMQTTGateway → MQTT 
 ## How it works
 
 - The ESP32 hub passively decodes MiFlora BLE broadcasts and publishes them to MQTT.
-- This app (one long-lived Node process) subscribes, stores at most one reading per sensor per hour, and evaluates every plant twice a day: moisture below its species threshold, battery under 15%, or sensor silent for 36h → Web Push notification (re-nagged at most daily).
+- This app (one long-lived Node process) subscribes, stores at most one reading per sensor per hour, and evaluates every plant hourly: moisture below its species threshold, battery under 15%, or sensor silent for 36h → Web Push notification (re-nagged at most daily).
 - Thresholds come from OpenPlantbook by species, falling back to category presets, always manually overridable.
 
 ## Dev

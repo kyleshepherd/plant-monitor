@@ -1,0 +1,67 @@
+tsconfig.json
+  s_0db89ba871093c::t_f2ad16821809db 1-20
+drizzle.config.ts
+  s_0db89ba871093c::t_31f47e84bbc7b1 1-7
+pnpm-workspace.yaml
+  s_0db89ba871093c::t_f2ad16821809db 1-2
+docker-compose.yml
+  s_0db89ba871093c::t_49803e1cdba2bd 8
+  s_0db89ba871093c::t_762178a794ce79 1-7,9-15
+vite.config.ts
+  s_0db89ba871093c::t_5eda4c11c53758 1
+  s_0db89ba871093c::t_cd4161a6ca0d10 2,4,9,18-19
+  s_0db89ba871093c::t_f2ad16821809db 3,5-8,10-17,20
+static/robots.txt
+  s_0db89ba871093c::t_f2ad16821809db 1-3
+src/app.html
+  s_0db89ba871093c::t_f2ad16821809db 1-12
+src/routes/+layout.svelte
+  s_0db89ba871093c::t_e19d38acdc6ee8 2,12
+  s_0db89ba871093c::t_f2ad16821809db 1,3-11
+infra/mosquitto.conf
+  s_0db89ba871093c::t_8d4b4535a66ddf 1-2
+src/app.css
+  s_0db89ba871093c::t_980319cddb7502 1
+src/lib/index.ts
+  s_0db89ba871093c::t_f2ad16821809db 1
+.npmrc
+  s_0db89ba871093c::t_f2ad16821809db 1
+.vscode/extensions.json
+  s_0db89ba871093c::t_f2ad16821809db 1-3
+README.md
+  s_0db89ba871093c::t_f2ad16821809db 1-42
+.gitignore
+  s_0db89ba871093c::t_f2ad16821809db 1-23
+src/lib/assets/favicon.svg
+  s_0db89ba871093c::t_f2ad16821809db 1
+package.json
+  s_0db89ba871093c::t_f2ad16821809db 1,3-11,16-18,20-21,26-27,30,39-40
+  s_0db89ba871093c::t_312dccb93cef2b 2,12-15
+  s_0db89ba871093c::t_4861f9136f759d 19,22,24-25,28-29,31-38
+  s_0db89ba871093c::t_646adcb8c06c0b 23
+src/app.d.ts
+  s_0db89ba871093c::t_f2ad16821809db 1-13
+.env.example
+  s_0db89ba871093c::t_28530742205e8a 1
+  s_0db89ba871093c::t_0f96a6c672ccfb 2-10
+src/routes/+page.svelte
+  s_0db89ba871093c::t_f2ad16821809db 1-2
+pnpm-lock.yaml
+  s_0db89ba871093c::t_b021655f0228e1 1-3146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "31497aa8885822de4681114b0f68e059e6b450ea",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+src/routes/+layout.svelte
+  s_0db89ba871093c::t_55d94b5f15c6c8 4,7,12-41,66,68-91
+  s_0db89ba871093c::t_acedbd7d9da749 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "9c20bf37c080eff7faa51fc76f43e49372c8fcbb",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": null
+    }
+  }
+}

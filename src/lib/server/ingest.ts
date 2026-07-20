@@ -1,5 +1,5 @@
-import { desc, eq } from 'drizzle-orm';
-import { db, sensors, readings } from './db';
+import { and, desc, eq, isNull } from 'drizzle-orm';
+import { db, sensors, readings, plants, alerts } from './db';
 
 export type ParsedReading = {
 	mac: string;
@@ -74,6 +74,26 @@ export async function ingest(topic: string, payload: string, now = new Date()): 
 			set: { lastSeenAt: now, ...(parsed.battery !== null ? { battery: parsed.battery } : {}) }
 		})
 		.returning();
+
+	// Eagerly resolve an open low_moisture alert as soon as a fresh reading shows
+	// the plant is back above its minimum — don't make the user wait for the
+	// hourly evaluation to see "watered" reflected.
+	if (parsed.moisture !== null) {
+		const [open] = await db
+			.select({ alertId: alerts.id, moistureMin: plants.moistureMin })
+			.from(alerts)
+			.innerJoin(plants, eq(alerts.plantId, plants.id))
+			.where(
+				and(
+					eq(alerts.sensorId, sensor.id),
+					eq(alerts.type, 'low_moisture'),
+					isNull(alerts.resolvedAt)
+				)
+			);
+		if (open && parsed.moisture >= open.moistureMin) {
+			await db.update(alerts).set({ resolvedAt: now }).where(eq(alerts.id, open.alertId));
+		}
+	}
 
 	const [latest] = await db
 		.select({ recordedAt: readings.recordedAt })

@@ -1,9 +1,11 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 import { startMqtt } from '$lib/server/mqtt';
+import { seedSnapshots } from '$lib/server/ingest';
 import { startScheduler } from '$lib/server/scheduler';
 import { isAuthed } from '$lib/server/auth';
 
 startMqtt();
+seedSnapshots().catch((e) => console.error('[ingest] snapshot seed failed', e));
 startScheduler();
 
 export const handle: Handle = async ({ event, resolve }) => {

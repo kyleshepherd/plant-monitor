@@ -1,0 +1,21 @@
+src/lib/server/ingest.ts
+  s_0db89ba871093c::t_209e22b9de6a45 65-88
+src/hooks.server.ts
+  s_0db89ba871093c::t_458e39e18e3132 3,8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "ec591cc43f4ec70c7a2398dc98ea08bc20bc0a84",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

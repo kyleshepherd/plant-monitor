@@ -1,7 +1,9 @@
 import { runEvaluation } from './alerts';
 import { sendPushToAll } from './push';
 
-const TWELVE_H = 12 * 3600_000;
+// Evaluate hourly: alerts land within an hour of a threshold breach. Spam is
+// prevented by the per-alert 24h re-notify throttle, not the check cadence.
+const EVAL_INTERVAL = 3600_000;
 const g = globalThis as { __plantScheduler?: ReturnType<typeof setInterval> };
 
 export function startScheduler(): void {
@@ -9,5 +11,5 @@ export function startScheduler(): void {
 	const run = () =>
 		runEvaluation(sendPushToAll).catch((e) => console.error('[scheduler] evaluation failed', e));
 	setTimeout(run, 30_000); // first pass shortly after boot
-	g.__plantScheduler = setInterval(run, TWELVE_H);
+	g.__plantScheduler = setInterval(run, EVAL_INTERVAL);
 }

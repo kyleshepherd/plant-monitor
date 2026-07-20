@@ -1,0 +1,29 @@
+scripts/.batt-cycle.tmp.mjs
+  s_0db89ba871093c::t_fb54620db45582 1-13
+scripts/.cycle-watch.tmp.mjs
+  s_0db89ba871093c::t_1e9fc072813d83 1-29
+tests/ingest.test.ts
+  s_0db89ba871093c::t_7c509e65ecc4f7 52-89
+src/lib/server/ingest.ts
+  s_0db89ba871093c::t_7be707e917de79 15-46,55-56,59-78
+scripts/.raw-watch.tmp.mjs
+  s_0db89ba871093c::t_f71db945506104 1-16
+scripts/.wake2.tmp.mjs
+  s_0db89ba871093c::t_3f2d31ed31c689 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7931484a18436eb2ff6c8b9d11e77264d6efeba0",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

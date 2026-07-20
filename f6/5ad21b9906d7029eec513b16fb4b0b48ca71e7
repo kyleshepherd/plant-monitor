@@ -1,0 +1,22 @@
+scripts/.batt-watch.tmp.mjs
+  s_0db89ba871093c::t_8d06c07a0a4b85 1-13
+src/lib/server/ingest.ts
+  s_0db89ba871093c::t_42c624d12ad715 78-97
+  s_0db89ba871093c::t_16afa90d93d873 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "f65ad21b9906d7029eec513b16fb4b0b48ca71e7",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

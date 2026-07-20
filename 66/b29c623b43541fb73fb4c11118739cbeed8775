@@ -1,0 +1,109 @@
+src/lib/utils.ts
+  s_0db89ba871093c::t_482cf1fc713c35 1-13
+src/lib/components/ui/select/select-group-heading.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-21
+src/lib/components/ui/select/select.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-11
+src/lib/components/ui/label/label.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/select/select-group.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-17
+src/lib/components/ui/select/select-label.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/input/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-7
+src/lib/components/ui/input/input.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-48
+src/lib/components/ui/select/select-item.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-40
+src/lib/components/ui/select/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-37
+src/routes/+layout.svelte
+  s_0db89ba871093c::t_eeb8e33c99f73d 4,31,34,36-39
+  s_0db89ba871093c::t_57f9d327a41ba0 5
+src/lib/components/ui/progress/progress.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-27
+src/lib/components/ui/card/card-footer.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/select/select-scroll-down-button.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/separator/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-7
+src/lib/components/ui/card/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-25
+src/lib/components/ui/select/select-separator.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-18
+src/routes/claim/[sensorId]/+page.svelte
+  s_0db89ba871093c::t_e21c46f0bd6508 2-7,12,16,27-46,48-74,76-86,88-94,96-100
+src/lib/components/ui/card/card-action.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-23
+src/lib/components/ui/card/card.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-22
+components.json
+  s_0db89ba871093c::t_482cf1fc713c35 1-20
+src/app.css
+  s_0db89ba871093c::t_482cf1fc713c35 2-14,16-129
+  s_0db89ba871093c::t_e2d24935feaf3e 15
+src/lib/components/ui/card/card-description.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/card/card-title.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/card/card-content.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/lib/components/ui/select/select-scroll-up-button.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-20
+src/routes/login/+page.svelte
+  s_0db89ba871093c::t_46e5c3fef74796 2-5,9-24
+src/lib/components/ui/separator/separator.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-23
+src/lib/Sparkline.svelte
+  s_0db89ba871093c::t_e24c9b0ee113a0 4-12,28-34,42,51-52,55-56
+src/lib/components/ui/badge/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-2
+src/lib/components/ui/button/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-17
+src/lib/components/ui/select/select-portal.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-7
+src/lib/components/ui/select/select-trigger.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-29
+src/lib/components/ui/button/button.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-82
+src/lib/components/ui/card/card-header.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-23
+src/lib/components/ui/label/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-7
+src/lib/components/ui/progress/index.ts
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-7
+src/routes/plants/[id]/+page.svelte
+  s_0db89ba871093c::t_25446f326d9fa7 3-9,11-15,18,20-25,27-98,100-103
+package.json
+  s_0db89ba871093c::t_482cf1fc713c35 18,20,29,31,34-35,37
+  s_0db89ba871093c::t_5c91c8cf72ffaa 19,28
+vite.config.ts
+  s_0db89ba871093c::t_2e9fbf8e54b2ca 19
+src/lib/components/ui/badge/badge.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-49
+src/routes/+page.svelte
+  s_0db89ba871093c::t_9a0ce795716e37 3-5,7-11,22-26,29-32,34,36-77,81-85,90-100
+  s_0db89ba871093c::t_932081dd971086 6,101-104
+src/lib/components/ui/select/select-content.svelte
+  s_0db89ba871093c::t_5c91c8cf72ffaa 1-45
+pnpm-lock.yaml
+  s_0db89ba871093c::t_7aee4269f15440 24-32,54-59,63-65,72-77,81-83,564-578,595-599,938-940,1128-1134,1165-1168,1199-1202,1412-1414,1529-1532,1566-1568,1637-1645,1659-1664,1704-1706,1719-1724,1729-1744,1779-1781,2179-2195,2215-2218,2449-2452,2621-2633,2667-2668,2690-2691,2860-2861,2948-2949,2997-2998,3107-3115,3126-3133,3168-3171,3187-3195,3217-3226,3252-3253
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "66b29c623b43541fb73fb4c11118739cbeed8775",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

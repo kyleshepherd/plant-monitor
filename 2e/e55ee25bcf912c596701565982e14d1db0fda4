@@ -1,0 +1,24 @@
+railway.json
+  s_0db89ba871093c::t_e35ba6802debd8 1-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "2ee55ee25bcf912c596701565982e14d1db0fda4",
+  "prompts": {},
+  "humans": {
+    "h_0f8ff4ffb0acf7": {
+      "author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

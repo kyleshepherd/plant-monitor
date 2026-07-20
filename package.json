@@ -44,5 +44,6 @@
 		"mqtt": "^5.15.2",
 		"postgres": "^3.4.9",
 		"web-push": "^3.6.7"
-	}
+	},
+	"packageManager": "pnpm@11.8.0"
 }

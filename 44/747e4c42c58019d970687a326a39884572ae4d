@@ -1,0 +1,27 @@
+src/routes/plants/[id]/+page.svelte
+  s_0db89ba871093c::t_3ff22d6541715c 1-50
+src/routes/+page.svelte
+  s_0db89ba871093c::t_5c52db55c5a00b 2,4-12,15-49
+src/lib/Sparkline.svelte
+  s_0db89ba871093c::t_a00a01dd8a4223 1-43
+src/routes/plants/[id]/+page.server.ts
+  s_0db89ba871093c::t_d470ae1a1e0cbf 1-51
+src/routes/+page.server.ts
+  s_0db89ba871093c::t_021f6ca60fd30f 1-2,19-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "44747e4c42c58019d970687a326a39884572ae4d",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

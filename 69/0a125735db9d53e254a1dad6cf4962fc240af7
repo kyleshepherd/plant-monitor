@@ -1,0 +1,21 @@
+docs/hardware-setup.md
+  s_0db89ba871093c::t_9d541d7047dd37 1-30
+README.md
+  s_0db89ba871093c::t_90352e7b135ed4 1,3,5,7-9,11,13-18,20,22,24-27,29,31-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "690a125735db9d53e254a1dad6cf4962fc240af7",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

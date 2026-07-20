@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 	import Sparkline from '$lib/Sparkline.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
@@ -10,6 +12,13 @@
 	import Clock from '@lucide/svelte/icons/clock';
 
 	let { data } = $props();
+
+	// Installed PWAs have no pull-to-refresh; refetch the dashboard periodically.
+	onMount(() => {
+		const t = setInterval(invalidateAll, 30_000);
+		return () => clearInterval(t);
+	});
+
 	const ago = (d: Date | string | null) => {
 		if (!d) return 'never';
 		const mins = Math.round((Date.now() - new Date(d).getTime()) / 60000);

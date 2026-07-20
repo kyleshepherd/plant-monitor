@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: plant
+      POSTGRES_PASSWORD: plant
+      POSTGRES_DB: plant
+    ports: ['5433:5432'] # 5432 is taken by checkpnt's Postgres
+    volumes: ['pgdata:/var/lib/postgresql/data']
+  mqtt:
+    image: eclipse-mosquitto:2
+    ports: ['1883:1883']
+    volumes: ['./infra/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro']
+volumes:
+  pgdata:

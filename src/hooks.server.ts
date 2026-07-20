@@ -1,8 +1,10 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 import { startMqtt } from '$lib/server/mqtt';
+import { startScheduler } from '$lib/server/scheduler';
 import { isAuthed } from '$lib/server/auth';
 
 startMqtt();
+startScheduler();
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const path = event.url.pathname;

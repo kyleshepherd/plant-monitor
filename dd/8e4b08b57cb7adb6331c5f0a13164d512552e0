@@ -1,0 +1,24 @@
+src/lib/server/ingest.ts
+  s_0db89ba871093c::t_617b4f38df5bc8 58-62
+src/routes/+page.server.ts
+  s_0db89ba871093c::t_f4866fa2a06ecb 3
+  s_0db89ba871093c::t_07a7e7f5aa3e7d 31-41,44
+scripts/.watch-lux.tmp.mjs
+  s_0db89ba871093c::t_9d27d4ff8b9f5e 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "dd8e4b08b57cb7adb6331c5f0a13164d512552e0",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

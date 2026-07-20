@@ -1,10 +1,24 @@
 <script lang="ts">
+	import * as Card from '$lib/components/ui/card';
+	import { Input } from '$lib/components/ui/input';
+	import { Button } from '$lib/components/ui/button';
+
 	let { form } = $props();
 </script>
 
-<form method="POST" class="mx-auto mt-24 flex max-w-xs flex-col gap-3">
-	<h1 class="text-xl font-semibold">🌱 Plant Monitor</h1>
-	<input name="password" type="password" placeholder="Password" required class="rounded border p-2" />
-	{#if form?.wrong}<p class="text-sm text-red-600">Wrong password</p>{/if}
-	<button class="rounded bg-green-700 p-2 text-white">Log in</button>
-</form>
+<div class="flex min-h-[70dvh] items-center justify-center">
+	<Card.Root class="w-full max-w-sm">
+		<Card.Header class="text-center">
+			<div class="mb-1 text-4xl">🌱</div>
+			<Card.Title class="text-xl">Plant Monitor</Card.Title>
+			<Card.Description>Enter the password to tend the garden</Card.Description>
+		</Card.Header>
+		<Card.Content>
+			<form method="POST" class="flex flex-col gap-3">
+				<Input name="password" type="password" placeholder="Password" required />
+				{#if form?.wrong}<p class="text-sm text-destructive">Wrong password</p>{/if}
+				<Button type="submit" class="w-full">Log in</Button>
+			</form>
+		</Card.Content>
+	</Card.Root>
+</div>

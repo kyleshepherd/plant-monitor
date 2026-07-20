@@ -16,5 +16,6 @@ export default defineConfig({
 			adapter: adapter()
 		})
 	],
+	ssr: { noExternal: ['@lucide/svelte'] },
 	test: { include: ['tests/**/*.test.ts'] }
 });

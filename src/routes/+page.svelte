@@ -1,5 +1,14 @@
 <script lang="ts">
 	import Sparkline from '$lib/Sparkline.svelte';
+	import * as Card from '$lib/components/ui/card';
+	import { Badge } from '$lib/components/ui/badge';
+	import { Progress } from '$lib/components/ui/progress';
+	import Droplets from '@lucide/svelte/icons/droplets';
+	import Sun from '@lucide/svelte/icons/sun';
+	import BatteryLow from '@lucide/svelte/icons/battery-low';
+	import RadioTower from '@lucide/svelte/icons/radio-tower';
+	import Clock from '@lucide/svelte/icons/clock';
+
 	let { data } = $props();
 	const ago = (d: Date | string | null) => {
 		if (!d) return 'never';
@@ -10,40 +19,87 @@
 				? `${Math.round(mins / 60)}h ago`
 				: `${Math.round(mins / 1440)}d ago`;
 	};
+	const alertLabel: Record<string, string> = {
+		low_moisture: 'Needs water',
+		low_battery: 'Low battery',
+		sensor_silent: 'Sensor silent'
+	};
 </script>
 
-<h1 class="mb-4 text-xl font-semibold">🌱 Plants</h1>
+<div class="mb-6 flex items-center gap-2">
+	<span class="text-2xl">🌱</span>
+	<h1 class="text-2xl font-semibold tracking-tight">Plants</h1>
+</div>
 
-<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-4">
 	{#each data.plants as { plant, sensor, latest, history, openAlert } (plant.id)}
-		<a
-			href="/plants/{plant.id}"
-			class="rounded-lg border p-3 {openAlert ? 'border-red-400 bg-red-50' : ''}"
-		>
-			<div class="flex items-center justify-between gap-3">
-				<div>
-					<p class="font-medium">{plant.name}</p>
-					<p class="text-sm text-gray-500">
-						💧 {latest?.moisture ?? '–'}% (min {plant.moistureMin}) · ☀️ {latest?.lux ?? '–'} lx
-						{#if sensor.battery != null}· 🔋 {sensor.battery}%{/if}
-						· seen {ago(sensor.lastSeenAt)}
-					</p>
-					{#if openAlert}
-						<p class="text-sm font-medium text-red-700">⚠ {openAlert.type.replaceAll('_', ' ')}</p>
-					{/if}
-				</div>
-				<Sparkline points={history} min={plant.moistureMin} />
-			</div>
+		<a href="/plants/{plant.id}" class="group">
+			<Card.Root
+				class="transition-shadow group-hover:shadow-md {openAlert ? 'border-destructive/50' : ''}"
+			>
+				<Card.Content class="flex items-center justify-between gap-4">
+					<div class="min-w-0 flex-1">
+						<div class="flex items-center gap-2">
+							<p class="truncate font-medium">{plant.name}</p>
+							{#if openAlert}
+								<Badge variant="destructive" class="shrink-0">
+									{#if openAlert.type === 'low_moisture'}<Droplets class="size-3" />
+									{:else if openAlert.type === 'low_battery'}<BatteryLow class="size-3" />
+									{:else}<RadioTower class="size-3" />{/if}
+									{alertLabel[openAlert.type] ?? openAlert.type}
+								</Badge>
+							{/if}
+						</div>
+						<div class="mt-2 flex items-center gap-2">
+							<Droplets class="size-4 shrink-0 text-muted-foreground" />
+							<Progress value={latest?.moisture ?? 0} max={100} class="h-2 flex-1" />
+							<span class="w-12 text-right text-sm tabular-nums text-muted-foreground"
+								>{latest?.moisture ?? '–'}%</span
+							>
+						</div>
+						<p class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+							<span>min {plant.moistureMin}%</span>
+							<span class="inline-flex items-center gap-1"
+								><Sun class="size-3" />{latest?.lux ?? '–'} lx</span
+							>
+							{#if sensor.battery != null}
+								<span class="inline-flex items-center gap-1"
+									><BatteryLow class="size-3" />{sensor.battery}%</span
+								>
+							{/if}
+							<span class="inline-flex items-center gap-1"
+								><Clock class="size-3" />{ago(sensor.lastSeenAt)}</span
+							>
+						</p>
+					</div>
+					<Sparkline points={history} min={plant.moistureMin} />
+				</Card.Content>
+			</Card.Root>
 		</a>
 	{/each}
 	{#if data.plants.length === 0}
-		<p class="text-gray-500">No plants yet — claim a sensor below.</p>
+		<Card.Root>
+			<Card.Content class="py-10 text-center text-muted-foreground">
+				No plants yet — claim a sensor below 🌿
+			</Card.Content>
+		</Card.Root>
 	{/if}
 </div>
 
 {#if data.unclaimed.length}
-	<h2 class="mt-8 mb-2 font-semibold">Unclaimed sensors</h2>
-	{#each data.unclaimed as s (s.id)}
-		<a class="block text-sm underline" href="/claim/{s.id}">{s.mac} — seen {ago(s.lastSeenAt)}</a>
-	{/each}
+	<h2 class="mt-10 mb-3 text-sm font-medium tracking-wide text-muted-foreground uppercase">
+		Unclaimed sensors
+	</h2>
+	<div class="flex flex-col gap-2">
+		{#each data.unclaimed as s (s.id)}
+			<a href="/claim/{s.id}" class="group">
+				<Card.Root class="transition-shadow group-hover:shadow-md">
+					<Card.Content class="flex items-center justify-between py-3">
+						<span class="font-mono text-sm">{s.mac}</span>
+						<span class="text-xs text-muted-foreground">seen {ago(s.lastSeenAt)} · claim →</span>
+					</Card.Content>
+				</Card.Root>
+			</a>
+		{/each}
+	</div>
 {/if}

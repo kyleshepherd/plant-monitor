@@ -1,10 +1,15 @@
 <script lang="ts">
 	let {
 		points,
-		min
-	}: { points: { moisture: number | null; recordedAt: Date | string }[]; min: number } = $props();
-	const W = 120;
-	const H = 32;
+		min,
+		wide = false
+	}: {
+		points: { moisture: number | null; recordedAt: Date | string }[];
+		min: number;
+		wide?: boolean;
+	} = $props();
+	const W = $derived(wide ? 360 : 120);
+	const H = $derived(wide ? 80 : 32);
 	const vals = $derived(points.filter((p) => p.moisture != null) as { moisture: number }[]);
 	const path = $derived(
 		vals.length < 2
@@ -20,7 +25,13 @@
 </script>
 
 {#if path}
-	<svg viewBox="0 0 {W} {H}" class="h-8 w-[120px] shrink-0" role="img" aria-label="moisture history">
+	<svg
+		viewBox="0 0 {W} {H}"
+		class={wide ? 'h-24 w-full' : 'h-8 w-[120px] shrink-0'}
+		preserveAspectRatio="none"
+		role="img"
+		aria-label="moisture history"
+	>
 		<line
 			x1="0"
 			y1={minY}
@@ -28,7 +39,7 @@
 			y2={minY}
 			stroke="currentColor"
 			stroke-dasharray="2 2"
-			class="text-red-300"
+			class="text-destructive/40"
 		/>
 		<polyline
 			points={path}
@@ -37,7 +48,10 @@
 			stroke-width="2"
 			stroke-linejoin="round"
 			stroke-linecap="round"
-			class="text-green-700"
+			vector-effect="non-scaling-stroke"
+			class="text-primary"
 		/>
 	</svg>
+{:else}
+	<p class="text-xs text-muted-foreground">no data yet</p>
 {/if}

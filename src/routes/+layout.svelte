@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../app.css';
 	import { onMount } from 'svelte';
+	import { Button } from '$lib/components/ui/button';
+	import BellRing from '@lucide/svelte/icons/bell-ring';
 
 	let { children } = $props();
 	let pushState = $state<'unsupported' | 'off' | 'on'>('unsupported');
@@ -26,13 +28,15 @@
 
 <svelte:head>
 	<link rel="icon" href="/favicon.png" />
+	<title>Plant Monitor</title>
 </svelte:head>
 
-<main class="mx-auto max-w-2xl p-4">
+<main class="mx-auto max-w-2xl p-4 pb-16">
 	{#if pushState === 'off'}
-		<button onclick={enablePush} class="mb-4 w-full rounded bg-green-100 p-2 text-sm text-green-900">
-			🔔 Enable watering alerts on this device
-		</button>
+		<Button variant="secondary" class="mb-4 w-full" onclick={enablePush}>
+			<BellRing class="size-4" />
+			Enable watering alerts on this device
+		</Button>
 	{/if}
 	{@render children()}
 </main>

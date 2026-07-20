@@ -1,5 +1,5 @@
-import { desc, eq, isNull } from 'drizzle-orm';
-import { db, sensors, plants, readings } from '$lib/server/db';
+import { and, desc, eq, isNull } from 'drizzle-orm';
+import { db, sensors, plants, readings, alerts } from '$lib/server/db';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -16,7 +16,23 @@ export const load: PageServerLoad = async () => {
 				.where(eq(readings.sensorId, row.sensor.id))
 				.orderBy(desc(readings.recordedAt))
 				.limit(1);
-			return { ...row, latest: latest ?? null };
+			const history = await db
+				.select({ moisture: readings.moisture, recordedAt: readings.recordedAt })
+				.from(readings)
+				.where(eq(readings.sensorId, row.sensor.id))
+				.orderBy(desc(readings.recordedAt))
+				.limit(84); // ~7 days of hourly readings
+			const [openAlert] = await db
+				.select()
+				.from(alerts)
+				.where(and(eq(alerts.sensorId, row.sensor.id), isNull(alerts.resolvedAt)))
+				.limit(1);
+			return {
+				...row,
+				latest: latest ?? null,
+				history: history.reverse(),
+				openAlert: openAlert ?? null
+			};
 		})
 	);
 

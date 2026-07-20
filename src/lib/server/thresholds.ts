@@ -9,14 +9,16 @@ export const PRESETS = {
 } as const satisfies Record<string, { moistureMin: number; moistureMax: number }>;
 
 const BASE = 'https://open.plantbook.io/api/v1/plant';
-const headers = () => ({ 'X-API-Key': env.OPENPLANTBOOK_API_KEY ?? '' });
+const headers = () => ({ Authorization: `Token ${env.OPENPLANTBOOK_API_KEY ?? ''}` });
 
 export async function searchSpecies(
 	q: string,
 	fetchFn: typeof fetch = fetch
 ): Promise<{ pid: string; display: string }[]> {
 	try {
-		const res = await fetchFn(`${BASE}/search?q=${encodeURIComponent(q)}`, { headers: headers() });
+		const res = await fetchFn(`${BASE}/search?alias=${encodeURIComponent(q)}`, {
+			headers: headers()
+		});
 		if (!res.ok) return [];
 		const data = await res.json();
 		return (data.results ?? []).map((r: { pid: string; display_pid?: string }) => ({
@@ -33,7 +35,9 @@ export async function speciesThresholds(
 	fetchFn: typeof fetch = fetch
 ): Promise<{ moistureMin: number; moistureMax: number } | null> {
 	try {
-		const res = await fetchFn(`${BASE}/detail/${encodeURIComponent(pid)}`, { headers: headers() });
+		const res = await fetchFn(`${BASE}/detail/${encodeURIComponent(pid)}/`, {
+			headers: headers()
+		});
 		if (!res.ok) return null;
 		const data = await res.json();
 		if (typeof data.min_soil_moist !== 'number' || typeof data.max_soil_moist !== 'number')

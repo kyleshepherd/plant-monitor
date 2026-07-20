@@ -62,27 +62,40 @@ export function currentSnapshot(mac: string): ParsedReading | undefined {
 	return snapshots.get(mac);
 }
 
-// Seed the live snapshots from the latest stored readings so a fresh deploy
-// shows last-known values (≤1h old) instead of dashes until re-broadcast.
+// Seed the live snapshots from stored readings so a fresh deploy shows
+// last-known values instead of dashes until re-broadcast. Coalesces across the
+// last day of rows (individual rows can be sparse), and merges UNDER any value
+// a live broadcast has already delivered since boot.
 export async function seedSnapshots(): Promise<void> {
 	const rows = await db.select().from(sensors);
 	for (const sensor of rows) {
-		if (snapshots.has(sensor.mac)) continue;
-		const [latest] = await db
+		const recent = await db
 			.select()
 			.from(readings)
 			.where(eq(readings.sensorId, sensor.id))
 			.orderBy(desc(readings.recordedAt))
-			.limit(1);
-		if (!latest) continue;
-		snapshots.set(sensor.mac, {
+			.limit(24);
+		if (!recent.length) continue;
+		let seeded: ParsedReading = {
 			mac: sensor.mac,
-			moisture: latest.moisture,
-			lux: latest.lux,
-			tempC: latest.tempC,
-			fertility: latest.fertility,
-			battery: latest.battery ?? sensor.battery
-		});
+			moisture: null,
+			lux: null,
+			tempC: null,
+			fertility: null,
+			battery: sensor.battery
+		};
+		for (const r of recent.reverse()) {
+			seeded = mergeReading(seeded, {
+				mac: sensor.mac,
+				moisture: r.moisture,
+				lux: r.lux,
+				tempC: r.tempC,
+				fertility: r.fertility,
+				battery: r.battery
+			});
+		}
+		// live values (arrived since boot) win over seeded ones
+		snapshots.set(sensor.mac, mergeReading(seeded, snapshots.get(sensor.mac) ?? seeded));
 	}
 }
 

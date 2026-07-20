@@ -1,0 +1,21 @@
+src/lib/server/alerts.ts
+  s_0db89ba871093c::t_481c76413fbe80 1-108
+tests/alerts.test.ts
+  s_0db89ba871093c::t_6c53f15b4e95d9 1-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "6d80171b869daf0baf42e0d5658fcfc5a39f028f",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

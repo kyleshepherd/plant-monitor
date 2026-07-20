@@ -71,11 +71,9 @@
 							<span class="inline-flex items-center gap-1"
 								><Sun class="size-3" />{latest?.lux ?? '–'} lx</span
 							>
-							{#if sensor.battery != null}
-								<span class="inline-flex items-center gap-1"
-									><BatteryLow class="size-3" />{sensor.battery}%</span
-								>
-							{/if}
+							<span class="inline-flex items-center gap-1"
+								><BatteryLow class="size-3" />{latest?.battery ?? sensor.battery ?? '–'}%</span
+							>
 							<span class="inline-flex items-center gap-1"
 								><Clock class="size-3" />{ago(sensor.lastSeenAt)}</span
 							>

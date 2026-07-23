@@ -106,6 +106,29 @@ export function currentSnapshot(mac: string): ParsedReading | undefined {
 	return snapshots.get(mac);
 }
 
+export type LiveReading = {
+	moisture: number | null;
+	lux: number | null;
+	tempC: number | null;
+	fertility: number | null;
+	battery: number | null;
+};
+
+// The value to show/judge: the live in-memory snapshot, falling back per-metric
+// to the latest stored reading. This is what both the dashboard and the alert
+// evaluator should use so "what you see" matches "what alerts".
+export function liveReading(mac: string, stored: Partial<LiveReading> | null): LiveReading | null {
+	const snap = currentSnapshot(mac);
+	if (!snap && !stored) return null;
+	return {
+		moisture: snap?.moisture ?? stored?.moisture ?? null,
+		lux: snap?.lux ?? stored?.lux ?? null,
+		tempC: snap?.tempC ?? stored?.tempC ?? null,
+		fertility: snap?.fertility ?? stored?.fertility ?? null,
+		battery: snap?.battery ?? stored?.battery ?? null
+	};
+}
+
 // Seed the live snapshots from stored readings so a fresh deploy shows
 // last-known values instead of dashes until re-broadcast. Coalesces across the
 // last day of rows (individual rows can be sparse), and merges UNDER any value

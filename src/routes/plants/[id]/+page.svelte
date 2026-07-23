@@ -5,9 +5,29 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
+	import { Progress } from '$lib/components/ui/progress';
 	import { Separator } from '$lib/components/ui/separator';
+	import Droplets from '@lucide/svelte/icons/droplets';
+	import Sun from '@lucide/svelte/icons/sun';
+	import Thermometer from '@lucide/svelte/icons/thermometer';
+	import BatteryLow from '@lucide/svelte/icons/battery-low';
+	import Clock from '@lucide/svelte/icons/clock';
 
-	let { data } = $props();
+	let { data, form } = $props();
+	let editing = $state(false);
+
+	const needsWater = $derived(
+		data.latest?.moisture != null && data.latest.moisture < data.plant.moistureMin
+	);
+	const ago = (d: Date | string | null) => {
+		if (!d) return 'never';
+		const mins = Math.round((Date.now() - new Date(d).getTime()) / 60000);
+		return mins < 60
+			? `${mins}m ago`
+			: mins < 1440
+				? `${Math.round(mins / 60)}h ago`
+				: `${Math.round(mins / 1440)}d ago`;
+	};
 	const alertLabel: Record<string, string> = {
 		low_moisture: 'needs water',
 		low_battery: 'low battery',
@@ -17,19 +37,91 @@
 
 <a href="/" class="text-sm text-muted-foreground hover:underline">← back</a>
 
-<div class="mt-2 mb-4">
-	<h1 class="text-2xl font-semibold tracking-tight">{data.plant.name}</h1>
-	<p class="mt-1 text-sm text-muted-foreground">
-		{data.plant.species ?? 'no species set'} · sensor
-		<span class="font-mono">{data.sensor.mac}</span>
-		· thresholds via <Badge variant="secondary">{data.plant.thresholdSource}</Badge>
-	</p>
-	{#if data.plant.sunlightNotes}
-		<p class="mt-1 text-sm text-muted-foreground">☀️ {data.plant.sunlightNotes}</p>
-	{/if}
+<div class="mt-2 mb-4 flex items-start justify-between gap-3">
+	<div class="min-w-0">
+		<div class="flex flex-wrap items-center gap-2">
+			<h1 class="text-2xl font-semibold tracking-tight">{data.plant.name}</h1>
+			{#if needsWater}
+				<Badge variant="destructive"><Droplets class="size-3" /> Needs water</Badge>
+			{/if}
+		</div>
+		<p class="mt-1 text-sm text-muted-foreground">
+			{data.plant.species ?? 'no species set'} · sensor
+			<span class="font-mono">{data.sensor.mac}</span>
+		</p>
+		{#if data.plant.sunlightNotes}
+			<p class="mt-1 text-sm text-muted-foreground">☀️ {data.plant.sunlightNotes}</p>
+		{/if}
+	</div>
+	<Button variant="outline" size="sm" onclick={() => (editing = !editing)}>
+		{editing ? 'Cancel' : 'Edit'}
+	</Button>
 </div>
 
-<Card.Root>
+{#if editing}
+	<Card.Root class="mb-4">
+		<Card.Header>
+			<Card.Title class="text-base">Edit details</Card.Title>
+		</Card.Header>
+		<Card.Content>
+			<form method="POST" action="?/details" class="flex flex-col gap-3">
+				<div class="flex flex-col gap-1.5">
+					<Label for="name">Name</Label>
+					<Input id="name" name="name" value={data.plant.name} required />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="species">Species</Label>
+					<Input id="species" name="species" value={data.plant.species ?? ''} placeholder="e.g. Strelitzia reginae" />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="sunlightNotes">Sunlight / location notes</Label>
+					<Input
+						id="sunlightNotes"
+						name="sunlightNotes"
+						value={data.plant.sunlightNotes ?? ''}
+						placeholder="e.g. bright east window"
+					/>
+				</div>
+				{#if form?.message}<p class="text-sm text-destructive">{form.message}</p>{/if}
+				<Button type="submit" class="self-start">Save</Button>
+			</form>
+		</Card.Content>
+	</Card.Root>
+{/if}
+
+<Card.Root class={needsWater ? 'border-destructive/60 bg-destructive/5' : ''}>
+	<Card.Header>
+		<Card.Title class="text-base">Now</Card.Title>
+		<Card.Description>updated {ago(data.sensor.lastSeenAt)}</Card.Description>
+	</Card.Header>
+	<Card.Content class="flex flex-col gap-3">
+		<div class="flex items-center gap-2">
+			<Droplets class="size-4 shrink-0 {needsWater ? 'text-destructive' : 'text-muted-foreground'}" />
+			<Progress value={data.latest?.moisture ?? 0} max={100} class="h-2 flex-1" />
+			<span
+				class="w-16 text-right text-sm font-medium tabular-nums {needsWater
+					? 'text-destructive'
+					: ''}">{data.latest?.moisture ?? '–'}%</span
+			>
+		</div>
+		<div class="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
+			<span class="inline-flex items-center gap-1.5">
+				<Sun class="size-4" />{data.latest?.lux ?? '–'} lx
+			</span>
+			<span class="inline-flex items-center gap-1.5">
+				<Thermometer class="size-4" />{data.latest?.tempC ?? '–'}°C
+			</span>
+			<span class="inline-flex items-center gap-1.5">
+				<BatteryLow class="size-4" />{data.latest?.battery ?? data.sensor.battery ?? '–'}%
+			</span>
+			<span class="inline-flex items-center gap-1.5">
+				<Clock class="size-4" />min {data.plant.moistureMin}%
+			</span>
+		</div>
+	</Card.Content>
+</Card.Root>
+
+<Card.Root class="mt-4">
 	<Card.Header>
 		<Card.Title class="text-base">Last 7 days</Card.Title>
 	</Card.Header>

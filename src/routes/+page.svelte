@@ -42,28 +42,41 @@
 
 <div class="flex flex-col gap-4">
 	{#each data.plants as { plant, sensor, latest, history, openAlert } (plant.id)}
+		{@const needsWater = latest?.moisture != null && latest.moisture < plant.moistureMin}
+		{@const otherAlert = openAlert && openAlert.type !== 'low_moisture' ? openAlert : null}
 		<a href="/plants/{plant.id}" class="group">
 			<Card.Root
-				class="transition-shadow group-hover:shadow-md {openAlert ? 'border-destructive/50' : ''}"
+				class="transition-shadow group-hover:shadow-md {needsWater || otherAlert
+					? 'border-destructive/60 bg-destructive/5'
+					: ''}"
 			>
 				<Card.Content class="flex items-center justify-between gap-4">
 					<div class="min-w-0 flex-1">
-						<div class="flex items-center gap-2">
+						<div class="flex flex-wrap items-center gap-2">
 							<p class="truncate font-medium">{plant.name}</p>
-							{#if openAlert}
+							{#if needsWater}
 								<Badge variant="destructive" class="shrink-0">
-									{#if openAlert.type === 'low_moisture'}<Droplets class="size-3" />
-									{:else if openAlert.type === 'low_battery'}<BatteryLow class="size-3" />
+									<Droplets class="size-3" />
+									Needs water
+								</Badge>
+							{/if}
+							{#if otherAlert}
+								<Badge variant="destructive" class="shrink-0">
+									{#if otherAlert.type === 'low_battery'}<BatteryLow class="size-3" />
 									{:else}<RadioTower class="size-3" />{/if}
-									{alertLabel[openAlert.type] ?? openAlert.type}
+									{alertLabel[otherAlert.type] ?? otherAlert.type}
 								</Badge>
 							{/if}
 						</div>
 						<div class="mt-2 flex items-center gap-2">
-							<Droplets class="size-4 shrink-0 text-muted-foreground" />
+							<Droplets
+								class="size-4 shrink-0 {needsWater ? 'text-destructive' : 'text-muted-foreground'}"
+							/>
 							<Progress value={latest?.moisture ?? 0} max={100} class="h-2 flex-1" />
-							<span class="w-12 text-right text-sm tabular-nums text-muted-foreground"
-								>{latest?.moisture ?? '–'}%</span
+							<span
+								class="w-12 text-right text-sm font-medium tabular-nums {needsWater
+									? 'text-destructive'
+									: 'text-muted-foreground'}">{latest?.moisture ?? '–'}%</span
 							>
 						</div>
 						<p class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">

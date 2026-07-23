@@ -1,0 +1,29 @@
+src/routes/plants/[id]/+page.server.ts
+  s_0db89ba871093c::t_366aba42ddf698 1,4,15-21,34,38-51
+src/lib/server/ingest.ts
+  s_0db89ba871093c::t_01a92afa1058e5 109-131
+src/routes/+page.server.ts
+  s_0db89ba871093c::t_42963030066b8a 3
+  s_0db89ba871093c::t_36339e802586a5 33
+src/routes/+page.svelte
+  s_0db89ba871093c::t_93f38f86ebd8f3 45-46,49-51,55,57,59-65,67,72-74,76-79
+src/routes/plants/[id]/+page.svelte
+  s_0db89ba871093c::t_fed2126390a729 8,10-14,16-30,40-58,61-91,93-124
+  s_0db89ba871093c::t_0088e6a86e5ce8 92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "c74a48e7ef0755fee9daf4b5438ac979c3304d7e",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

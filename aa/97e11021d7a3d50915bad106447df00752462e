@@ -1,0 +1,22 @@
+src/lib/server/db/schema.ts
+  s_0db89ba871093c::t_fe5b7bbf37fda6 22
+src/routes/add/+page.svelte
+  s_0db89ba871093c::t_1e6edfd37f69cd 10-23
+  s_0db89ba871093c::t_3171240ebfbfd9 43-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "aa97e11021d7a3d50915bad106447df00752462e",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

@@ -2,15 +2,31 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { and, desc, eq, gte } from 'drizzle-orm';
 import { db, plants, sensors, readings, alerts } from '$lib/server/db';
 import { liveReading } from '$lib/server/ingest';
+import { careRule, wateredAgo, CARE_CATEGORIES } from '$lib/server/care';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const [row] = await db
 		.select({ plant: plants, sensor: sensors })
 		.from(plants)
-		.innerJoin(sensors, eq(plants.sensorId, sensors.id))
+		.leftJoin(sensors, eq(plants.sensorId, sensors.id))
 		.where(eq(plants.id, Number(params.id)));
 	if (!row) error(404, 'No such plant');
+
+	// Manual (sensorless) plant — care card + watering log, no readings.
+	if (!row.sensor) {
+		return {
+			plant: row.plant,
+			sensor: null,
+			manual: true as const,
+			care: careRule(row.plant.careCategory),
+			wateredAgo: wateredAgo(row.plant.lastWateredAt),
+			categories: CARE_CATEGORIES,
+			latest: null,
+			history: [] as (typeof readings.$inferSelect)[],
+			alertLog: [] as (typeof alerts.$inferSelect)[]
+		};
+	}
 
 	const [stored] = await db
 		.select()
@@ -31,7 +47,14 @@ export const load: PageServerLoad = async ({ params }) => {
 		.where(eq(alerts.sensorId, row.sensor.id))
 		.orderBy(desc(alerts.createdAt))
 		.limit(20);
-	return { ...row, latest: liveReading(row.sensor.mac, stored ?? null), history, alertLog };
+	return {
+		plant: row.plant,
+		sensor: row.sensor,
+		manual: false as const,
+		latest: liveReading(row.sensor.mac, stored ?? null),
+		history,
+		alertLog
+	};
 };
 
 export const actions: Actions = {
@@ -39,12 +62,14 @@ export const actions: Actions = {
 		const form = await request.formData();
 		const name = String(form.get('name') ?? '').trim();
 		if (!name) return fail(400, { message: 'Name required' });
+		const category = form.get('category');
 		await db
 			.update(plants)
 			.set({
 				name,
 				species: String(form.get('species') ?? '').trim() || null,
-				sunlightNotes: String(form.get('sunlightNotes') ?? '').trim() || null
+				sunlightNotes: String(form.get('sunlightNotes') ?? '').trim() || null,
+				...(category ? { careCategory: String(category) } : {})
 			})
 			.where(eq(plants.id, Number(params.id)));
 		redirect(303, `/plants/${params.id}`);
@@ -61,6 +86,13 @@ export const actions: Actions = {
 			.where(eq(plants.id, Number(params.id)));
 		redirect(303, `/plants/${params.id}`);
 	},
+	watered: async ({ params }) => {
+		await db
+			.update(plants)
+			.set({ lastWateredAt: new Date() })
+			.where(eq(plants.id, Number(params.id)));
+		redirect(303, `/plants/${params.id}`);
+	},
 	unclaim: async ({ params }) => {
 		const id = Number(params.id);
 		const [plant] = await db.select().from(plants).where(eq(plants.id, id));
@@ -68,6 +100,11 @@ export const actions: Actions = {
 			await db.update(alerts).set({ resolvedAt: new Date() }).where(eq(alerts.plantId, id));
 			await db.delete(plants).where(eq(plants.id, id));
 		}
+		redirect(303, '/');
+	},
+	// Manual plants have no sensor to unclaim — just delete the plant.
+	delete: async ({ params }) => {
+		await db.delete(plants).where(eq(plants.id, Number(params.id)));
 		redirect(303, '/');
 	}
 };

@@ -10,13 +10,16 @@ export const sensors = pgTable('sensors', {
 
 export const plants = pgTable('plants', {
 	id: serial('id').primaryKey(),
-	sensorId: integer('sensor_id').notNull().unique().references(() => sensors.id),
+	// null = manual (sensorless) plant, tracked by eye via a SUStee-style indicator
+	sensorId: integer('sensor_id').unique().references(() => sensors.id),
 	name: text('name').notNull(),
 	species: text('species'),
 	sunlightNotes: text('sunlight_notes'),
 	moistureMin: integer('moisture_min').notNull(),
 	moistureMax: integer('moisture_max').notNull(),
 	thresholdSource: text('threshold_source').notNull(), // 'openplantbook' | 'preset' | 'manual'
+	careCategory: text('care_category'), // 'succulent'|'tropical'|'fern'|'herb'|'general' — drives the care card
+	lastWateredAt: timestamp('last_watered_at', { withTimezone: true }),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });
 

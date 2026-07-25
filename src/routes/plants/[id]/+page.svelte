@@ -39,8 +39,16 @@
 
 <a href="/" class="text-sm text-muted-foreground hover:underline">← back</a>
 
-<div class="mt-2 mb-4 flex items-start justify-between gap-3">
-	<div class="min-w-0">
+<div class="mt-2 mb-4 flex items-start gap-3">
+	{#if data.plant.imageUrl}
+		<img
+			src={data.plant.imageUrl}
+			alt={data.plant.name}
+			class="size-16 shrink-0 rounded-lg object-cover"
+			onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')}
+		/>
+	{/if}
+	<div class="min-w-0 flex-1">
 		<div class="flex flex-wrap items-center gap-2">
 			<h1 class="text-2xl font-semibold tracking-tight">{data.plant.name}</h1>
 			{#if data.manual}

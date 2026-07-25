@@ -1,5 +1,32 @@
 import { describe, it, expect, vi } from 'vitest';
-import { PRESETS, searchSpecies, speciesThresholds } from '../src/lib/server/thresholds';
+import { PRESETS, searchSpecies, speciesThresholds, speciesImage } from '../src/lib/server/thresholds';
+
+const jsonRes = (body: unknown, status = 200) =>
+	new Response(JSON.stringify(body), { status });
+
+describe('speciesImage', () => {
+	it('returns the image_url when the species is an exact pid', async () => {
+		const fetchFn = vi.fn().mockResolvedValue(jsonRes({ image_url: 'https://img/monstera.jpg' }));
+		expect(await speciesImage('monstera deliciosa', fetchFn as unknown as typeof fetch)).toBe(
+			'https://img/monstera.jpg'
+		);
+	});
+	it('falls back to search when the detail lookup misses', async () => {
+		const fetchFn = vi
+			.fn()
+			.mockResolvedValueOnce(jsonRes({}, 404)) // detail by free text → miss
+			.mockResolvedValueOnce(jsonRes({ results: [{ pid: 'ficus lyrata' }] })) // search
+			.mockResolvedValueOnce(jsonRes({ image_url: 'https://img/ficus.jpg' })); // detail by pid
+		expect(await speciesImage('fiddle leaf', fetchFn as unknown as typeof fetch)).toBe(
+			'https://img/ficus.jpg'
+		);
+	});
+	it('returns null for empty species or when nothing is found', async () => {
+		expect(await speciesImage('', vi.fn() as unknown as typeof fetch)).toBeNull();
+		const miss = vi.fn().mockResolvedValue(jsonRes({ results: [] }, 404));
+		expect(await speciesImage('nope', miss as unknown as typeof fetch)).toBeNull();
+	});
+});
 
 describe('PRESETS', () => {
 	it('has all five categories with sane ranges', () => {

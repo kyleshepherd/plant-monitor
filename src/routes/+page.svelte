@@ -53,7 +53,15 @@
 		{@const plant = entry.plant}
 		{#if entry.manual}
 			<Card.Root>
-				<Card.Content class="flex items-start justify-between gap-4">
+				<Card.Content class="flex items-start gap-3">
+					{#if plant.imageUrl}
+						<img
+							src={plant.imageUrl}
+							alt={plant.name}
+							class="size-14 shrink-0 rounded-lg object-cover"
+							onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')}
+						/>
+					{/if}
 					<div class="min-w-0 flex-1">
 						<div class="flex flex-wrap items-center gap-2">
 							<a href="/plants/{plant.id}" class="truncate font-medium hover:underline"
@@ -87,7 +95,15 @@
 					? 'border-destructive/60 bg-destructive/5'
 					: ''}"
 			>
-				<Card.Content class="flex items-center justify-between gap-4">
+				<Card.Content class="flex items-center gap-3">
+					{#if plant.imageUrl}
+						<img
+							src={plant.imageUrl}
+							alt={plant.name}
+							class="size-14 shrink-0 rounded-lg object-cover"
+							onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')}
+						/>
+					{/if}
 					<div class="min-w-0 flex-1">
 						<div class="flex flex-wrap items-center gap-2">
 							<p class="truncate font-medium">{plant.name}</p>

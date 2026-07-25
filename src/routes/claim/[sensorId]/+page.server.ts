@@ -1,7 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { db, sensors, plants } from '$lib/server/db';
-import { PRESETS, speciesThresholds } from '$lib/server/thresholds';
+import { PRESETS, speciesThresholds, speciesImage } from '$lib/server/thresholds';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -40,7 +40,8 @@ export const actions: Actions = {
 			sunlightNotes: String(form.get('sunlightNotes') ?? '') || null,
 			moistureMin: thresholds.moistureMin,
 			moistureMax: thresholds.moistureMax,
-			thresholdSource: source
+			thresholdSource: source,
+			imageUrl: await speciesImage(speciesPid || null)
 		});
 		redirect(303, '/');
 	}

@@ -3,6 +3,7 @@ import { and, desc, eq, gte } from 'drizzle-orm';
 import { db, plants, sensors, readings, alerts } from '$lib/server/db';
 import { liveReading } from '$lib/server/ingest';
 import { careRule, wateredAgo, CARE_CATEGORIES } from '$lib/server/care';
+import { speciesImage } from '$lib/server/thresholds';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -63,12 +64,14 @@ export const actions: Actions = {
 		const name = String(form.get('name') ?? '').trim();
 		if (!name) return fail(400, { message: 'Name required' });
 		const category = form.get('category');
+		const species = String(form.get('species') ?? '').trim() || null;
 		await db
 			.update(plants)
 			.set({
 				name,
-				species: String(form.get('species') ?? '').trim() || null,
+				species,
 				sunlightNotes: String(form.get('sunlightNotes') ?? '').trim() || null,
+				imageUrl: await speciesImage(species),
 				...(category ? { careCategory: String(category) } : {})
 			})
 			.where(eq(plants.id, Number(params.id)));

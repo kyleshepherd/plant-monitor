@@ -47,3 +47,27 @@ export async function speciesThresholds(
 		return null;
 	}
 }
+
+async function detailImage(pid: string, fetchFn: typeof fetch): Promise<string | null> {
+	const res = await fetchFn(`${BASE}/detail/${encodeURIComponent(pid)}/`, { headers: headers() });
+	if (!res.ok) return null;
+	const data = await res.json();
+	return typeof data.image_url === 'string' && data.image_url ? data.image_url : null;
+}
+
+// Resolve a species photo from OpenPlantbook. `species` may be an exact pid
+// (from the search picker) or free text — falls back to a search to find the pid.
+export async function speciesImage(
+	species: string | null | undefined,
+	fetchFn: typeof fetch = fetch
+): Promise<string | null> {
+	if (!species) return null;
+	try {
+		const direct = await detailImage(species, fetchFn);
+		if (direct) return direct;
+		const [first] = await searchSpecies(species, fetchFn);
+		return first ? await detailImage(first.pid, fetchFn) : null;
+	} catch {
+		return null;
+	}
+}

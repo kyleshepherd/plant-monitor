@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { db, plants } from '$lib/server/db';
-import { PRESETS } from '$lib/server/thresholds';
+import { PRESETS, speciesImage } from '$lib/server/thresholds';
 import { CARE_CATEGORIES } from '$lib/server/care';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -16,17 +16,19 @@ export const actions: Actions = {
 
 		const category = String(form.get('category') ?? 'general');
 		const preset = PRESETS[category as keyof typeof PRESETS] ?? PRESETS.general;
+		const species = String(form.get('species') ?? '').trim() || null;
 
 		await db.insert(plants).values({
 			sensorId: null,
 			name,
-			species: String(form.get('species') ?? '').trim() || null,
+			species,
 			sunlightNotes: String(form.get('sunlightNotes') ?? '').trim() || null,
 			// moisture columns are required but unused for manual plants; seed from the preset
 			moistureMin: preset.moistureMin,
 			moistureMax: preset.moistureMax,
 			thresholdSource: 'preset',
-			careCategory: category
+			careCategory: category,
+			imageUrl: await speciesImage(species)
 		});
 		redirect(303, '/');
 	}

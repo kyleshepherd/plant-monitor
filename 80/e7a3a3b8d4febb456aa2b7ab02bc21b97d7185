@@ -1,0 +1,37 @@
+src/lib/server/thresholds.ts
+  s_0db89ba871093c::t_c41ff997bda1cc 50-73
+src/routes/plants/[id]/+page.svelte
+  s_0db89ba871093c::t_487219c895277b 42-47,49-51
+  s_0db89ba871093c::t_6c3612a8126efd 48
+tests/thresholds.test.ts
+  s_0db89ba871093c::t_1da740a8c5ca10 2-29
+src/routes/+page.svelte
+  s_0db89ba871093c::t_d4fc4fce2d31c5 56-61,63-64
+  s_0db89ba871093c::t_6ceeed9af36dcd 98-103,105-106
+  s_0db89ba871093c::t_6c3612a8126efd 62,104
+src/routes/add/+page.server.ts
+  s_0db89ba871093c::t_a3bb77c9898a58 3
+  s_0db89ba871093c::t_6bb933d45a0f80 19,24,30-31
+src/routes/claim/[sensorId]/+page.server.ts
+  s_0db89ba871093c::t_b7cd5fd62614dd 4
+  s_0db89ba871093c::t_420cd6beee8598 43-44
+src/routes/plants/[id]/+page.server.ts
+  s_0db89ba871093c::t_c8131b650f1f22 6
+  s_0db89ba871093c::t_f0623e89f070e4 67,72,74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "80e7a3a3b8d4febb456aa2b7ab02bc21b97d7185",
+  "prompts": {},
+  "sessions": {
+    "s_0db89ba871093c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffdf63cf-4c9f-4abb-9472-e057bb4d1113",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kyle Shepherd <kyleshepherd13@gmail.com>"
+    }
+  }
+}

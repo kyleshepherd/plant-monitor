@@ -7,6 +7,20 @@
 
 	let { data, form } = $props();
 	let category = $state('general');
+
+	let species = $state('');
+	let results = $state<{ pid: string; display: string }[]>([]);
+	let timer: ReturnType<typeof setTimeout>;
+
+	function search() {
+		clearTimeout(timer);
+		timer = setTimeout(async () => {
+			results =
+				species.length >= 2
+					? await (await fetch(`/api/species?q=${encodeURIComponent(species)}`)).json()
+					: [];
+		}, 300);
+	}
 </script>
 
 <a href="/" class="text-sm text-muted-foreground hover:underline">← back</a>
@@ -26,7 +40,28 @@
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label for="species">Species <span class="text-muted-foreground">(optional)</span></Label>
-				<Input id="species" name="species" placeholder="e.g. Olea europaea" />
+				<Input
+					id="species"
+					name="species"
+					bind:value={species}
+					oninput={search}
+					placeholder="Search species…"
+					autocomplete="off"
+				/>
+				{#if results.length}
+					<div class="overflow-hidden rounded-md border">
+						{#each results.slice(0, 6) as r (r.pid)}
+							<button
+								type="button"
+								class="block w-full px-3 py-2 text-left text-sm hover:bg-accent"
+								onclick={() => {
+									species = r.pid;
+									results = [];
+								}}>{r.display}</button
+							>
+						{/each}
+					</div>
+				{/if}
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label>Type <span class="text-muted-foreground">(sets the watering rule)</span></Label>

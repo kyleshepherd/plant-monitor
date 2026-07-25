@@ -19,6 +19,7 @@ export const plants = pgTable('plants', {
 	moistureMax: integer('moisture_max').notNull(),
 	thresholdSource: text('threshold_source').notNull(), // 'openplantbook' | 'preset' | 'manual'
 	careCategory: text('care_category'), // 'succulent'|'tropical'|'fern'|'herb'|'general' — drives the care card
+	imageUrl: text('image_url'), // species photo from OpenPlantbook
 	lastWateredAt: timestamp('last_watered_at', { withTimezone: true }),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
 });

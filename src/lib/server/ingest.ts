@@ -166,9 +166,18 @@ export async function seedSnapshots(): Promise<void> {
 	}
 }
 
+// Last time any plant sensor broadcast reached us (boot time until one does) —
+// the gateway watchdog's signal that the hub is still forwarding.
+let lastHeardAt = Date.now();
+
+export function lastSensorHeardAt(): number {
+	return lastHeardAt;
+}
+
 export async function ingest(topic: string, payload: string, now = new Date()): Promise<void> {
 	const single = parseOmg(topic, payload);
 	if (!single) return;
+	lastHeardAt = now.getTime();
 	const parsed = mergeReading(snapshots.get(single.mac) ?? null, single);
 	snapshots.set(single.mac, parsed);
 

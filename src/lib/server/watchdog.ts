@@ -18,7 +18,11 @@ export function shouldRestart(
 	return lastRestartAt === null || now - lastRestartAt >= RETRY_MS;
 }
 
-export function startGatewayWatchdog(client: MqttClient, gatewayTopic: string): void {
+export function startGatewayWatchdog(
+	client: MqttClient,
+	gatewayTopic: string,
+	notify: (title: string, body: string) => Promise<void>
+): void {
 	let lastRestartAt: number | null = null;
 	setInterval(() => {
 		const now = Date.now();
@@ -27,5 +31,9 @@ export function startGatewayWatchdog(client: MqttClient, gatewayTopic: string): 
 		const quietMins = Math.round((now - lastSensorHeardAt()) / 60_000);
 		console.warn(`[watchdog] no sensor broadcasts for ${quietMins} min — restarting gateway`);
 		client.publish(`${gatewayTopic}/commands/MQTTtoSYS/config`, JSON.stringify({ cmd: 'restart' }));
+		notify(
+			'🔄 Plant hub restarted',
+			`No sensor readings for ${Math.round(quietMins / 60)}h — rebooted the gateway.`
+		).catch((e) => console.error('[watchdog] notify failed', e));
 	}, CHECK_MS);
 }

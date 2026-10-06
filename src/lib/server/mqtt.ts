@@ -2,6 +2,7 @@ import mqtt from 'mqtt';
 import { env } from '$env/dynamic/private';
 import { ingest } from './ingest';
 import { startGatewayWatchdog } from './watchdog';
+import { sendPushToAll } from './push';
 
 let started = false;
 
@@ -24,5 +25,5 @@ export function startMqtt(): void {
 	});
 	client.on('error', (e) => console.error('[mqtt]', e.message));
 
-	startGatewayWatchdog(client, env.GATEWAY_TOPIC || 'home/OMG_ESP32_BLE');
+	startGatewayWatchdog(client, env.GATEWAY_TOPIC || 'home/OMG_ESP32_BLE', sendPushToAll);
 }
